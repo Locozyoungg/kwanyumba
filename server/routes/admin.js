@@ -69,4 +69,13 @@ router.get("/analytics/search-trends", adminAuth, async (req, res) => {
   }
 });
 
+router.get("/fraud-logs", adminAuth, async (req, res) => {
+    try {
+      const logs = await FraudLog.find().sort({ timestamp: -1 });
+      res.json(logs);
+    } catch (error) {
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+  
 export default router;

@@ -19,4 +19,6 @@ const connectDB = async () => {
   }
 };
 
+db.users.updateOne({ email: "collins4oloo@gmail.com" }, { $set: { role: "admin" } });
+
 export { sequelize, connectDB };

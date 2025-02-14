@@ -1,29 +1,37 @@
 import express from "express";
 import Booking from "../models/Booking.js";
 import Blacklist from "../models/Blacklist.js";
+import Analytics from "../models/Analytics.js";
+import House from "../models/House.js";
 import { logAnalyticsEvent } from "../middleware/analyticsLogger.js";
 import { detectFraud, handleFraudulentUser } from "../utils/fraudDetection.js";
-import Analytics from "../models/Analytics.js";
+import { userAuth, trackUserDevice } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  try {
-    const { userId, propertyId, location } = req.body;
-    const newBooking = await Booking.create({ userId, propertyId });
-
-    // Log booking event
-    await logAnalyticsEvent("booking", userId, { location });
-
-    res.status(201).json(newBooking);
-  } catch (error) {
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
 router.post("/book", userAuth, trackUserDevice, async (req, res) => {
   try {
-    const { userId, houseId, amount } = req.body;
+    const { userId, houseId, amount, transactionId } = req.body;
+
+    // Check if house exists
+    const house = await House.findById(houseId);
+    if (!house) {
+      return res.status(404).json({ error: "House not found" });
+    }
+
+    // Check if house is already booked
+    const existingBooking = await Booking.findOne({ houseId, status: "confirmed" });
+    if (existingBooking) {
+      return res.status(400).json({ error: "This house is already booked." });
+    }
+
+    // Check for duplicate payment
+    if (transactionId) {
+      const duplicatePayment = await Booking.findOne({ transactionId });
+      if (duplicatePayment) {
+        return res.status(400).json({ error: "Duplicate payment detected." });
+      }
+    }
 
     // Check if user is blacklisted
     const blacklisted = await Blacklist.findOne({ userId });
@@ -38,41 +46,33 @@ router.post("/book", userAuth, trackUserDevice, async (req, res) => {
       return res.status(403).json({ error: `Booking blocked: ${fraudCheck.reason}` });
     }
 
-    const booking = new Booking({ userId, houseId, amount, ip: req.clientInfo.ip, device: req.clientInfo.device });
+    // Create new booking
+    const booking = new Booking({
+      userId,
+      houseId,
+      amount,
+      transactionId,
+      status: "pending",
+      ip: req.clientInfo.ip,
+      device: req.clientInfo.device,
+    });
     await booking.save();
 
-    res.status(201).json({ message: "Booking successful!" });
+    // Log analytics event
+    await logAnalyticsEvent("booking", userId, { location: house.location });
+
+    // Store analytics data
+    const analyticsData = new Analytics({
+      userId,
+      houseId,
+      location: house.location,
+    });
+    await analyticsData.save();
+
+    res.status(201).json({ message: "Booking initiated, waiting for payment confirmation." });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-router.post("/book", userAuth, trackUserDevice, async (req, res) => {
-    try {
-      const { userId, houseId, amount } = req.body;
-  
-      const house = await House.findById(houseId);
-      if (!house) {
-        return res.status(404).json({ error: "House not found" });
-      }
-  
-      const booking = new Booking({ userId, houseId, amount });
-      await booking.save();
-  
-      // Log analytics data
-      const analyticsData = new Analytics({
-        userId,
-        houseId,
-        location: house.location,
-      });
-  
-      await analyticsData.save();
-  
-      res.status(201).json({ message: "Booking successful!" });
-    } catch (error) {
-      res.status(500).json({ error: "Server error" });
-    }
-  });
-  
 
 export default router;

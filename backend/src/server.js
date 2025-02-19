@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path"; // Import path module
 import { sequelize, connectDB } from "./config/db.js"; // Import DB connection
 import User from "./models/User.js";
 import Property from "./models/Property.js";
@@ -22,6 +23,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/bookings", bookingRoutes);
 
+// Serve frontend from backend (for full-stack deployment)
+const __dirname = path.resolve(); // Get root directory
+app.use(express.static(path.join(__dirname, "../frontend/build"))); // Serve frontend files
+
+// Catch-all route to serve React index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
+
 // Ensure database connection before starting server
 const startServer = async () => {
   try {
@@ -43,6 +53,3 @@ const startServer = async () => {
 
 // Start the server
 startServer();
-app.get("/", (req, res) => {
-  res.send("Kwanyumba API is running...");
-});

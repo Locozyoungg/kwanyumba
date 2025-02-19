@@ -1,0 +1,11 @@
+services:
+  - name: kwanyumba-backend
+    type: web
+    buildCommand: |
+      cd frontend && npm install && npm run build
+      cd ../backend && yarn install
+    startCommand: node backend/src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+

@@ -1,5 +1,17 @@
 {
+  "name": "kwanyumba",
+  "version": "1.0.0",
+  "description": "Kwanyumba - A rental booking platform with M-Pesa integration",
   "type": "module",
+  "main": "backend/src/server.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "nodemon backend/src/server.js",
+    "build": "cd frontend && npm install && npm run build",
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "node backend/src/server.js",
+    "deploy": "npm run build && npm start"
+  },
   "dependencies": {
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
@@ -14,5 +26,21 @@
     "pg": "^8.13.3",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.5"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "kwanyumba",
+    "rental",
+    "booking",
+    "M-Pesa",
+    "express",
+    "sequelize"
+  ],
+  "author": "Oloo Collins",
+  "license": "MIT"
 }

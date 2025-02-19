@@ -25,11 +25,11 @@ app.use("/api/bookings", bookingRoutes);
 
 // Serve frontend from backend (for full-stack deployment)
 const __dirname = path.resolve(); // Get root directory
-app.use(express.static(path.join(__dirname, "../frontend/src"))); // Serve frontend files
+app.use(express.static(path.join(__dirname, "../frontend/src/pages"))); // Serve frontend files
 
 // Catch-all route to serve React index.js
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend/src", "index.js"));
+  res.sendFile(path.resolve(__dirname, "../frontend/src/pages", "index.js"));
 });
 
 // Ensure database connection before starting server

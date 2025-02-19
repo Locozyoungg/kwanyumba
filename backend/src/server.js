@@ -43,3 +43,6 @@ const startServer = async () => {
 
 // Start the server
 startServer();
+app.get("/", (req, res) => {
+  res.send("Kwanyumba API is running...");
+});

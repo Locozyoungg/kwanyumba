@@ -1,0 +1,47 @@
+/* File: src/styles/landing.css */
+.hero {
+    background-image: url('/assets/images/hero.jpg');
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+}
+
+.search-bar {
+    width: 60%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.how-it-works, .featured-listings, .testimonials {
+    padding: 20px;
+    text-align: center;
+}
+
+.listing-card {
+    display: inline-block;
+    margin: 10px;
+    text-align: left;
+}
+
+footer {
+    background: black;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}

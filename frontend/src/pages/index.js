@@ -7,7 +7,7 @@ import Testimonials from '../components/Testimonials';
 import Footer from '../components/Footer';
 import ReactDOM from "react-dom";
 import App from "./App";
-import "./styles/landing.css"; 
+import "./styles/landing.css";
 
 ReactDOM.render(
     <React.StrictMode>

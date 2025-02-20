@@ -1,6 +1,14 @@
 // File: src/components/FeaturedListings.js
 import React from 'react';
 
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+// Example API call
+fetch(`${API_URL}/properties`)
+  .then(response => response.json())
+  .then(data => console.log(data));
+
 const FeaturedListings = () => {
     return (
         <section className="featured-listings">

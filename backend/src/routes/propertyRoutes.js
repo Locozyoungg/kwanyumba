@@ -4,6 +4,7 @@ import { authorizeRoles } from "../middleware/roleMiddleware.js";
 import Property from "../models/Property.js";
 
 const router = express.Router();
+router.get("/properties", getProperties);
 
 /**
  * @route GET /api/properties

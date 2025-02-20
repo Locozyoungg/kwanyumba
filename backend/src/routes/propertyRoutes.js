@@ -1,10 +1,10 @@
+// File: routes/propertyRoutes.js
 import express from "express";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import { authorizeRoles } from "../middleware/roleMiddleware.js";
-import Property from "../models/Property.js";
+import Property from "../models/Property.js"; // Ensure this model exists
 
 const router = express.Router();
-router.get("/properties", getProperties);
 
 /**
  * @route GET /api/properties
@@ -12,7 +12,7 @@ router.get("/properties", getProperties);
  */
 router.get("/", async (req, res) => {
   try {
-    const properties = await Property.findAll({ include: "host" });
+    const properties = await Property.find().populate("host"); // Mongoose version
     res.json(properties);
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
@@ -26,13 +26,19 @@ router.get("/", async (req, res) => {
 router.post("/", verifyToken, authorizeRoles("host", "admin"), async (req, res) => {
   try {
     const { title, location, price } = req.body;
-    const newProperty = await Property.create({
+    
+    if (!title || !location || !price) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newProperty = new Property({
       title,
       location,
       price,
-      hostId: req.user.id, // Assign property to logged-in host
+      host: req.user.id, // Assign property to logged-in host
     });
 
+    await newProperty.save();
     res.status(201).json(newProperty);
   } catch (error) {
     res.status(500).json({ message: "Failed to create property", error });

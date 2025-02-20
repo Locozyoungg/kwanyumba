@@ -1,8 +1,8 @@
 // File: routes/propertyRoutes.js
 import express from "express";
-import { verifyToken } from "../middleware/authMiddleware.js";
-import { authorizeRoles } from "../middleware/roleMiddleware.js";
-import Property from "../models/Property.js"; // Ensure this model exists
+import { verifyToken } from "../../src/middleware/authMiddleware.js";
+import { authorizeRoles } from "../../src/middleware/roleMiddleware.js";
+import Property from "../../src/models/Property.js"; // Ensure this model exists
 
 const router = express.Router();
 

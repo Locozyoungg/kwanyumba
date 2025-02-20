@@ -1,8 +1,8 @@
 import express from "express";
-import { verifyToken } from "../middleware/authMiddleware.js";
-import Booking from "../models/Booking.js";
-import Property from "../models/Property.js";
-import { sendPayoutToHost } from "../services/ncbaPayoutService.js";
+import { verifyToken } from "../../src/middleware/authMiddleware.js";
+import Booking from "../../src/models/Booking.js";
+import Property from "../../src/models/Property.js";
+import { sendPayoutToHost } from "../../src/services/ncbaPayoutService.js";
 
 const router = express.Router();
 

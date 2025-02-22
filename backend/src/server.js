@@ -6,11 +6,11 @@ import User from "./models/User.js";
 import Property from "./models/Property.js";
 import Booking from "./models/Booking.js";
 import Transaction from "./models/Transaction.js";
-import authRoutes from "../api/routes/authRoutes.js";
-import propertyRoutes from "../api/routes/propertyRoutes.js";
-import bookingRoutes from "../api/routes/bookingRoutes.js";
+import authRoutes from "../../routes/authRoutes.js";
+import propertyRoutes from "../../routes/propertyRoutes.js";
+import bookingRoutes from "../../routes/bookingRoutes.js";
 import { fileURLToPath } from "url";
-import propertyRoutes from "../api/routes/propertyRoutes.js";
+import propertyRoutes from "../../routes/propertyRoutes.js";
 
 
 // Load environment variables
